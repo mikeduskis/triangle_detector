@@ -11,7 +11,7 @@ class BadRequest(Exception):
 
 
 def extract_sides(request):
-    if not request.is_json():
+    if not request.is_json:
         raise BadRequest('Expected application/json content type')
     sides = request.get_json()
     if 'a' not in sides:
@@ -33,13 +33,13 @@ def process_request(request, handler):
 
     try:
         sides = extract_sides(request)
-        response.response = json.dumps([handler(**sides)])
+        response.response = [json.dumps([handler(**sides)])]
     except BadRequest as e:
         response.status_code = e.code
-        response.response = e.message
+        response.response = [e.message]
     except Exception as e:
         response.status_code = 500
         response.headers['Content-type'] = 'text/plain'
-        response.response = str(e)
+        response.response = [str(e)]
 
     return response

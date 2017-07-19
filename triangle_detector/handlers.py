@@ -1,10 +1,10 @@
-def any_triangle(x, y, z):
+def any_triangle(a, b, c):
+    return (a + b > c and a + c > b and b + c > a)
+
+
+def right_triangle(a, b, c):
     pass
 
-    
-def right_triangle(x, y, z):
-    pass
 
-
-def isosceles_triangle(x, y, z):
+def isosceles_triangle(a, b, c):
     pass

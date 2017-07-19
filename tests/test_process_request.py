@@ -1,5 +1,5 @@
 import json
-from unittest import TestCase, main, skip
+from unittest import TestCase, main
 
 from expects import expect, be_a, be, contain, equal
 from werkzeug.wrappers import BaseResponse as Response
@@ -16,13 +16,10 @@ class FakeRequest:
 
     def __init__(self, a=1, b=2, c=3, is_json=True):
         self.sides = {'a': a, 'b': b, 'c': c}
-        self._is_json = is_json
+        self.is_json = is_json
 
     def get_json(self, *args, **kawrgs):
         return self.sides
-
-    def is_json(self):
-        return self._is_json
 
 
 class HandlerSpy:
@@ -44,6 +41,10 @@ class TestProcessRequest(TestCase):
     def test_response_is_a_response(self):
         response = process_request(FakeRequest(), lambda a, b, c: True)
         expect(response).to(be_a(Response))
+
+    def test_response_response_is_a_list(self):
+        response = process_request(FakeRequest(), lambda a, b, c: True)
+        expect(response.response).to(be_a(list))
 
     def test_passes_a_from_request_to_handler_as_int(self):
         expected = 42
@@ -114,7 +115,7 @@ class TestProcessRequest(TestCase):
     @staticmethod
     def extract_json(response):
         try:
-            payload = response.response
+            payload = response.response[0]
             return json.loads(payload)[0]
         except Exception as e:
             raise Exception(
