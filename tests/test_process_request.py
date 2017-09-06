@@ -5,7 +5,7 @@ from expects import expect, be_a, be, contain, equal
 from werkzeug.wrappers import BaseResponse as Response
 
 
-from triangle_detector.process_request import process_request
+from triangle_detector.process_request import BadRequest, process_request
 
 
 class FakeRequest:
@@ -107,6 +107,14 @@ class TestProcessRequest(TestCase):
         request.sides = {'a': 1, 'b': 2, 'c': 'the spinach imposition'}
         response = process_request(request, lambda a, b, c: True)
         expect(response.status_code).to(equal(400))
+
+    def tet_400_response_content_type_is_plain_text(self):
+        def handler(a, b, c):
+            raise BadRequest('whatever')
+        request = FakeRequest()
+        request.sides = {'a': 1, 'b': 1, 'c': 1}
+        response = process_request(request, handler)
+        expect(response.headers['Content-type']).to(equal('text/plain'))
 
     def test_response_has_json_content_type(self):
         response = process_request(FakeRequest(), lambda a, b, c: True)

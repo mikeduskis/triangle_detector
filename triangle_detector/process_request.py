@@ -36,6 +36,7 @@ def process_request(request, handler):
         response.response = [json.dumps([handler(**sides)])]
     except BadRequest as e:
         response.status_code = e.code
+        response.headers['Content-type'] = 'text/plain'
         response.response = [e.message]
     except Exception as e:
         response.status_code = 500
