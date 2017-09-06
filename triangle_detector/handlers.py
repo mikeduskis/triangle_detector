@@ -3,8 +3,8 @@ def any_triangle(a, b, c):
 
 
 def right_triangle(a, b, c):
-    pass
+    raise NotImplementedError('not implemented')
 
 
 def isosceles_triangle(a, b, c):
-    pass
+    raise NotImplementedError('not implemented')

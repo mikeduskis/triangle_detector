@@ -20,7 +20,7 @@ def right():
 
 @service.route('/isosceles', methods=['POST'])
 def isosceles():
-    return process_request(request, handlder=isosceles_triangle)
+    return process_request(request, handler=isosceles_triangle)
 
 
 if len(sys.argv) > 1:
