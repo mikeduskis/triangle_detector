@@ -1,7 +1,7 @@
 import json
 from unittest import TestCase, main
 
-from expects import expect, be_a, equal, have_length
+from expects import expect, be_a, contain, equal, have_length
 import requests
 
 from triangle_detector.server import Server
@@ -34,7 +34,8 @@ class TestTransport(TestCase):
     def test_returns_content_type_json_on_valid_request(self):
         response = send_request(a=1, b=1, c=1)
         headers = response.headers
-        assert 'Content-type' in headers
+        header_names = list(headers.keys())
+        expect(header_names).to(contain('Content-Type'))
         expect(headers['Content-type']).to(equal('application/json'))
 
     def test_returns_json_list_with_exactly_one_bool_on_valid_request(self):
