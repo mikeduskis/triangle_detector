@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
 import os
-from io import StringIO
-from subprocess import PIPE, Popen, STDOUT, TimeoutExpired
+from subprocess import PIPE, Popen, STDOUT
 from threading import Thread
 
 PYTHON = os.environ['PYTHON'] if 'PYTHON' in os.environ else 'python'

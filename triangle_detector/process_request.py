@@ -14,6 +14,8 @@ def extract_sides(request):
     if not request.is_json:
         raise BadRequest('Expected application/json content type')
     sides = request.get_json()
+    if 3 != len(sides):
+        raise BadRequest('A triangle must have three sides')
     if 'a' not in sides:
         raise BadRequest('Request lacks "a" side')
     if 'b' not in sides:
@@ -39,7 +41,8 @@ def process_request(request, handler):
         response.headers['Content-type'] = 'text/plain'
         response.response = [e.message]
     except Exception as e:
-        response.status_code = 500
+        # Preserve status codes from Werkzeug exceptions
+        response.status_code = e.code if hasattr(e, 'code') else 500
         response.headers['Content-type'] = 'text/plain'
         response.response = [str(e)]
 

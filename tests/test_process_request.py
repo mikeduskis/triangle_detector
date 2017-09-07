@@ -78,7 +78,7 @@ class TestProcessRequest(TestCase):
         response = process_request(request, lambda a, b, c: True)
         expect(response.status_code).to(equal(400))
 
-    def test_response_status_is_400_wjen_request_lacks_b(self):
+    def test_response_status_is_400_when_request_lacks_b(self):
         request = FakeRequest()
         request.sides = {'a': 1, 'c': 2}
         response = process_request(request, lambda a, b, c: True)
@@ -87,6 +87,12 @@ class TestProcessRequest(TestCase):
     def test_response_status_is_400_when_request_lacks_c(self):
         request = FakeRequest()
         request.sides = {'a': 1, 'b': 2}
+        response = process_request(request, lambda a, b, c: True)
+        expect(response.status_code).to(equal(400))
+
+    def test_response_status_is_400_when_request_has_four_sides(self):
+        request = FakeRequest()
+        request.sides = {'a': 1, 'b': 1, 'c': 1, 'd': 1}
         response = process_request(request, lambda a, b, c: True)
         expect(response.status_code).to(equal(400))
 
@@ -161,6 +167,17 @@ class TestProcessRequest(TestCase):
 
         response = process_request(FakeRequest(), handler)
         expect(response.status_code).to(equal(500))
+
+    def test_uses_status_code_in_handler_exception(self):
+        expected = 418
+
+        def handler(a, b, c):
+            e = Exception('I am a teapot')
+            e.code = expected
+            raise e
+
+        response = process_request(FakeRequest(), handler)
+        expect(response.status_code).to(equal(expected))
 
     def test_response_contains_exception_raised_by_handler(self):
         expected = "It's a fair cop."
