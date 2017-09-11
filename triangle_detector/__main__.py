@@ -13,6 +13,11 @@ def root():
     return process_request(request, handler=any_triangle)
 
 
+@service.route('/stuff', methods=['GET'])
+def get_stuff():
+    return "Here's your stuff\n"
+
+
 @service.route('/right', methods=['POST'])
 def right():
     return process_request(request, handler=right_triangle)
