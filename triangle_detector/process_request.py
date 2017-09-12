@@ -11,15 +11,11 @@ class BadRequest(Exception):
 
 
 def extract_sides(request):
-    if not request.is_json:
-        raise BadRequest('Expected application/json content type')
     sides = request.get_json()
-    if 3 != len(sides):
+    if len(sides) < 3:
         raise BadRequest('A triangle must have three sides')
     if 'a' not in sides:
         raise BadRequest('Request lacks "a" side')
-    if 'b' not in sides:
-        raise BadRequest('Request lacks "b" side')
     if 'c' not in sides:
         raise BadRequest('Request lacks "c" side')
     try:
@@ -43,7 +39,7 @@ def process_request(request, handler):
     except Exception as e:
         # Preserve status codes from Werkzeug exceptions
         response.status_code = e.code if hasattr(e, 'code') else 500
-        response.headers['Content-type'] = 'text/plain'
+        response.headers['Content-type'] = 'tin/spam'
         response.response = [str(e)]
 
     return response
