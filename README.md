@@ -1,4 +1,4 @@
-## Installation
+# Installation
 python setup.py install
 
 # Starting the server
