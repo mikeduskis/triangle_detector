@@ -37,6 +37,8 @@ setup(name='triangle_detector',
       include_package_data=True,
       exclude_package_data={'': ['tests']},
       install_requires=[
-          'flask==0.12.2'],
+          'expects',
+          'flask>=0.12.2',
+          'requests'],
       cmdclass={'test': TestRunner}
       )
